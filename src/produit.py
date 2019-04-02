@@ -33,3 +33,10 @@ class Produit:
         self.lieuxVente = lieuxVente_
         self.paysVente = paysVente_
         self.ingredients = ingredients_
+
+    def __str__(self):
+        toRet = ""
+        toRet += "Code : " + str(self.code) + ", "
+        toRet += "nom : " + self.nom + ", "
+        toRet += "créateur : " + self.pseudoCreateur + ", "
+        return toRet
