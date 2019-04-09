@@ -14,3 +14,5 @@ class Compte:
         self.pseudo = pseudo_
         self.motDePasse = motDePasse_
         self.administrateur = administrateur_
+        
+    

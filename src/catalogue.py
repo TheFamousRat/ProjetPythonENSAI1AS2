@@ -9,6 +9,7 @@ Ce fichier contient la classe catalogue, qui contient tous les produits enregist
 
 import csv
 from produit import Produit #Avec une majuscule désigne la classe
+from datetime import date
 
 class Catalogue:
     produits = []
@@ -46,18 +47,51 @@ class Catalogue:
     #Cherche si un produit avec un certain code est déjà enregistré
     def aLeProduitCode(self, codeCherche : int) -> bool:
         return self.indexProduitCode(codeCherche) != -1
-        
+
+    def reinitialiserBase(self) -> None:
+        del self.produits[:]
+
     #Charge un fichier csv contenant les données
     def chargerBase(self, baseDeDonnes : str):
         index = 0
-        with open(baseDeDonnes, newline='') as csvfile:
+        self.reinitialiserBase()
+        
+        with open(baseDeDonnes, newline='',encoding="utf8") as csvfile:
+            
             fileReader = csv.reader(csvfile, delimiter="	", quotechar='|')
+            
             for row in fileReader:
                 if index == 0:#La première ligne n'a que les en-têtes
                     pass
                 else:
-                    print(row[0])
+                    self.produits.append(Produit())
+                    currentIndex = len(self.produits) - 1
+                    #0 code barre
+                    self.produits[currentIndex].code = int(row[0])
+                    #1 créateur
+                    self.produits[currentIndex].pseudoCreateur = row[1]
+                    #2 date création
+                    self.produits[currentIndex].dateEnregistrement = date.fromtimestamp(int(row[2]))
+                    #3 dernière modif
+                    self.produits[currentIndex].dateDerniereModif = date.fromtimestamp(int(row[3]))
+                    #4 nom
+                    self.produits[currentIndex].nom = row[4]
+                    #5 quantité
+                    self.produits[currentIndex].quantite = row[5]
+                    #6 lieux fabrication
+                    for i in row[6].split(','):
+                        self.produits[currentIndex].lieuxFabrication.append(i)
+                    #7 lieux vente
+                    for i in row[7].split(','):
+                        self.produits[currentIndex].lieuxVente.append(i)
+                    #8 pays vente
+                    for i in row[8].split(','):
+                        self.produits[currentIndex].paysVente.append(i)
+                    #9 ingrédients
+                    for i in row[9].split(','):
+                        self.produits[currentIndex].ingredients.append(i)
+
                 index+=1
 
-myAss = Catalogue()
-myAss.chargerBase("../data/open_food_facts.csv")
+dummy = Catalogue()
+dummy.chargerBase("../data/open_food_facts.csv")

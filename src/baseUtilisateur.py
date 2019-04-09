@@ -40,4 +40,4 @@ class BaseUtilisateur:
                 break
         return ret
 
-        
+    

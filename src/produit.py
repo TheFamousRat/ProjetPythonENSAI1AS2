@@ -9,6 +9,7 @@ from datetime import date
 
 defaultDate = date(1970,1,1)
 
+
 #Classe décrivant un seul produit précisement
 class Produit:
     code = 0
@@ -16,7 +17,7 @@ class Produit:
     dateEnregistrement = defaultDate
     dateDerniereModif = defaultDate
     nom = ""
-    quantite = 0
+    quantite = ""
     lieuxFabrication = []
     lieuxVente = []
     paysVente = []

@@ -15,3 +15,8 @@ pseudoUtilisateur = None #Pseudo de l'utilisateur actuel
 testBase = BaseUtilisateur()
 testBase.ajouterCompte(Compte("gérardLeFat","1234"))
 print(testBase.identifiantsCorrects("gérardeFat","1234"))
+
+def input():
+    continuer = True
+    while (continuer):
+        #....
