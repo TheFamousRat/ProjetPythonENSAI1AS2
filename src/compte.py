@@ -8,11 +8,11 @@ Created on Tue Apr  2 11:18:32 2019
 class Compte:
     motDePasse = ""
     pseudo = ""
-    administrateur = False #Administrateur ou collaborateur
+    admin = False #Administrateur ou collaborateur
     
     def __init__(self, pseudo_ : str, motDePasse_ : str, administrateur_ : bool = False):
         self.pseudo = pseudo_
         self.motDePasse = motDePasse_
-        self.administrateur = administrateur_
+        self.admin = administrateur_
         
     
