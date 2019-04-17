@@ -37,7 +37,12 @@ class Produit:
 
     def __str__(self):
         toRet = ""
-        toRet += "Code : " + str(self.code) + ", "
-        toRet += "nom : " + self.nom + ", "
-        toRet += "créateur : " + self.pseudoCreateur + ", "
+        toRet += "Le produit est " + str(self.nom)
+        toRet += ", du code barre " + str(self.code)
+        toRet += ", crée le " + str(self.dateEnregistrement )
+        toRet += "et modifié le " + str(self.dateDerniereModif )
+        toRet += ", de quantité " + str(self.quantite )
+        toRet += ", fabriqué en " + str(self.lieuxFabrication )
+        toRet += " et vendu à " + str(self.lieuxVente )
+        toRet += " en " + str(self.paysVente)
         return toRet

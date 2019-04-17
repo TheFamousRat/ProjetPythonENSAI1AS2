@@ -13,8 +13,19 @@ from datetime import date
 
 class Catalogue:
     produits = []
+
     def __init__(self):
         pass
+    
+    def taille(self) -> int:
+        return len(self.produits)
+    
+    def obtenirProduit(self, codeProduit : int):
+        for prod in self.produits:
+            if prod.code == codeProduit:
+                return prod
+        print("Erreur : aucun produit avec le code " + str(codeProduit) + " n'est présent dans la base.")
+        return None
     
     def ajouterProduit(self, nouveauProduit : Produit):
         if not self.aLeProduit(nouveauProduit):
@@ -79,17 +90,13 @@ class Catalogue:
                     #5 quantité
                     self.produits[currentIndex].quantite = row[5]
                     #6 lieux fabrication
-                    for i in row[6].split(','):
-                        self.produits[currentIndex].lieuxFabrication.append(i)
+                    self.produits[currentIndex].lieuxFabrication = row[6].split(',')
                     #7 lieux vente
-                    for i in row[7].split(','):
-                        self.produits[currentIndex].lieuxVente.append(i)
+                    self.produits[currentIndex].lieuxVente = row[7].split(',')
                     #8 pays vente
-                    for i in row[8].split(','):
-                        self.produits[currentIndex].paysVente.append(i)
+                    self.produits[currentIndex].paysVente = row[8].split(',')
                     #9 ingrédients
-                    for i in row[9].split(','):
-                        self.produits[currentIndex].ingredients.append(i)
+                    self.produits[currentIndex].ingredients = row[9].split(',')
 
                 index+=1
 
