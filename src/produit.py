@@ -9,6 +9,17 @@ from datetime import date
 
 defaultDate = date(1970,1,1)
 
+def afficherListe(liste = []) -> str:
+    toRet = ""
+    if len(liste) == 1:
+        toRet += str(liste[0])
+    elif len(liste) >= 1:
+        for i in range(len(liste)):
+            if i != len(liste) - 1:
+                toRet += str(liste[i]) + ", "
+            else:
+                toRet += str(liste[i])
+    return toRet
 
 #Classe décrivant un seul produit précisement
 class Produit:
@@ -40,9 +51,10 @@ class Produit:
         toRet += "Le produit est " + str(self.nom)
         toRet += ", du code barre " + str(self.code)
         toRet += ", crée le " + str(self.dateEnregistrement )
-        toRet += "et modifié le " + str(self.dateDerniereModif )
+        toRet += " et modifié le " + str(self.dateDerniereModif )
         toRet += ", de quantité " + str(self.quantite )
-        toRet += ", fabriqué en " + str(self.lieuxFabrication )
-        toRet += " et vendu à " + str(self.lieuxVente )
-        toRet += " en " + str(self.paysVente)
+        toRet += ", fabriqué en " + afficherListe(self.lieuxFabrication)
+        toRet += " et vendu à " + afficherListe(self.lieuxVente )
+        toRet += " en " + afficherListe(self.paysVente)
         return toRet
+        

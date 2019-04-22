@@ -31,6 +31,13 @@ class Catalogue:
         if not self.aLeProduit(nouveauProduit):
             self.produits.append(nouveauProduit)
             
+    def mettreAJourProduit(self, codeProd : int, nvProd : Produit):
+        if self.aLeProduitCode(codeProd):
+            for i in range(len(self.produits)):
+                if self.produits[i].code == codeProd:
+                    self.produits[i] = nvProd
+                    break
+            
     def supprimerProduit(self, produitCible : Produit):
         self.supprimerProduitCode(produitCible.code)
         
@@ -99,6 +106,3 @@ class Catalogue:
                     self.produits[currentIndex].ingredients = row[9].split(',')
 
                 index+=1
-
-dummy = Catalogue()
-dummy.chargerBase("../data/open_food_facts.csv")
