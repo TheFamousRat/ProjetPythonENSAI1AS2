@@ -48,13 +48,22 @@ class Produit:
 
     def __str__(self):
         toRet = ""
-        toRet += "Le produit est " + str(self.nom)
+        toRet += "Le produit est " + (str(self.nom) if self.nom != "" else str(" non renseigné"))
         toRet += ", du code barre " + str(self.code)
         toRet += ", crée le " + str(self.dateEnregistrement )
         toRet += " et modifié le " + str(self.dateDerniereModif )
-        toRet += ", de quantité " + str(self.quantite )
-        toRet += ", fabriqué en " + afficherListe(self.lieuxFabrication)
-        toRet += " et vendu à " + afficherListe(self.lieuxVente )
-        toRet += " en " + afficherListe(self.paysVente)
+        toRet += ", de quantité " + (str(self.quantite) if self.quantite != "" else str(" non renseignée"))
+        if len(self.lieuxFabrication):
+            toRet += ", fabriqué en " + afficherListe(self.lieuxFabrication)
+        else:
+            toRet += ", lieux de fabrication non renseignés"
+        if len(self.lieuxVente):
+            toRet += " et vendu à " + afficherListe(self.lieuxVente)
+        else:
+            toRet += " aux lieux de vente non renseignés"
+        if len(self.paysVente):
+            toRet += " en " + afficherListe(self.paysVente)
+        else:
+            toRet += " dans des pays de vente non renseignés"
         return toRet
         

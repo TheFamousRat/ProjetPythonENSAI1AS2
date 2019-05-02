@@ -10,6 +10,7 @@ Fichier principal du programme
 import numpy as np
 import matplotlib.pyplot as plt
 import getpass
+import unicodedata
 
 from datetime import date
 from compte import Compte
@@ -17,12 +18,18 @@ from baseUtilisateur import BaseUtilisateur
 from catalogue import Catalogue
 from produit import Produit
 
-class Choix:#Une simple classe qui contient la description associée à un choix, ainsi que la fonction appellée
+class Choix:
+    """
+    Classe utilitaire qui contient la description associée à un choix, ainsi que la fonction appellée
+    """
     def __init__(self, desc, fonc):
         self.description = desc
         self.fonction = fonc
 
 def inputRepete(demandeNouvelInput : str = "Ajouter un input"):
+    """
+    Fonction utilitaire prenant un input en boucle jusqu'à ce que l'utilisateur demande l'arrêt (en appuyant sur espace quand l'input est vide)
+    """
     print("Appuyez sur entrée pour arrêter")
     inputs = []
     inputs.append(input(demandeNouvelInput))
@@ -31,7 +38,23 @@ def inputRepete(demandeNouvelInput : str = "Ajouter un input"):
     inputs.pop()
     return inputs
         
+def uniformiserString(inputStr : str) -> str:
+    """
+    Fonction utilitaire prenant en argument un string et retournant un string sans espaces, en majuscules et sans accents
+    """
+    #On sort les accents
+    inputStr = unicodedata.normalize('NFD', inputStr).encode('ascii', 'ignore').decode('ascii', 'ignore')
+    #Puis on passe en majuscules
+    inputStr = inputStr.upper()
+    #Enfin on retire les espaces
+    inputStr = inputStr.replace(" ", "")
+    
+    return inputStr
+    
 class Main:
+    """
+    Classe principale comprenantt les méthodes d'interaction avec l'utilisateur du programme
+    """
     def main(self):
         """
         Boucle principale.
@@ -129,7 +152,7 @@ class Main:
         self.choixDispo["admin"].append(Choix("Créer ou modifier un produit", self.creerModifProd))
         self.choixDispo["admin"].append(Choix("Supprimer un produit", self.supprimerProduit))
         self.choixDispo["admin"].append(Choix("Valider ou supprimer un compte contributeur", self.validerSupprimerCompte))
-        self.choixDispo["admin"].append(Choix("Deux statistiques au choix parmi trois", self.dummy))
+        self.choixDispo["admin"].append(Choix("Deux statistiques au choix parmi trois", self.statsDesc))
         self.choixDispo["admin"].append(Choix("Un graphique au choix parmi deux", self.choixGraphique))
         self.choixDispo["admin"].append(Choix("Déconnexion", self.deconnecter))
         self.choixDispo["admin"].append(Choix("Quitter", self.quitter))
@@ -141,7 +164,67 @@ class Main:
         print("LE CODE DE CETTE OPTION N'A PAS ETE ECRIT")
         
     def statsDesc(self):
-        pass
+        """
+        Demande à l'utilisateur quelles statistiques descriptives il désire voir, puis le redirige vers la méthode adaptée
+        """
+        print("Statistiques disponibles :")
+        print(" 1/Afficher les produits fabriqués hors de France")
+        print(" 2/Afficher les produits contenant un certain ingrédient")
+        
+        choix = self.obtenirChoix(2.0, 1.0, "Entrez votre choix : ")
+        
+        if choix == 1:
+            self.prodHorsFrance()
+        elif choix == 2:
+            self.prodCertainIngredient()
+        
+    def prodCertainIngredient(self):
+        """
+        Demande à l'utilsateur de rentrez un certain ingrédient, et affiche les produits possédant cet ingrédient
+        Au cours de ce procédé, tous les ingrédients sont uniformisés (majuscules, et accents et espaces retirés)
+        """
+        ingredientCherche = input("Rentrez le produit cherché : ")
+        ingredientCherche = uniformiserString(ingredientCherche)
+        produitsTrouves = []
+        
+        for prod in self.catalogueOFF.produits:
+            
+            ingredientsUniformes = []
+            for ingr in prod.ingredients:
+                ingredientsUniformes.append(uniformiserString(ingr))
+                
+            if ingredientCherche in ingredientsUniformes:
+                produitsTrouves.append(prod)
+                
+        print("Les produits contenant l'ingrédient demandé sont : ")
+        for prod in produitsTrouves:
+            print(prod)
+    
+    def prodHorsFrance(self):
+        """
+        Méthode cherchant les pays fabriqués hors de France (i.e. ne contenant pas le mot "France" dans leurs adresses de fabrication), et les affichant à l'utilisateur
+        """
+        produitsHorsFrance = []
+
+        for prod in self.catalogueOFF.produits:
+            fabFrance = False
+            #On cherche au moins une adresse de fabrication du produit contenant la France (ou une écriture en étranger)
+            for lieuFab in prod.lieuxFabrication:
+                lieuFab = uniformiserString(lieuFab)#On uniformise les adresses (retirer espaces et accents)
+                if fabFrance:
+                    break
+                for france in ["EN:FRANCE","FRANCIA","FRANKRIJK","FRANCE"]:
+                    if lieuFab.find(france) != -1:
+                        fabFrance = True
+                        break
+            
+            if not fabFrance:
+                produitsHorsFrance.append(prod)
+        
+        print(str(len(produitsHorsFrance)) + " ont été répertoriés")
+        print("Ils sont les suivants : ")
+        for prod in produitsHorsFrance:
+            print(prod)
         
     def creerModifProd(self):
         """
@@ -373,7 +456,7 @@ class Main:
         if produitAAfficher:
             toPrint = ""
             for i in produitAAfficher.ingredients:
-                toPrint += i
+                toPrint += i + ","
             print(toPrint)
             
     def creationCompte(self):

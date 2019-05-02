@@ -10,12 +10,21 @@ Ce fichier contient la classe BaseUtilisateur, qui contient les comptes de tous 
 from compte import Compte
 
 class BaseUtilisateur:
+    """
+    Classe contenant une base de données d'utilisateur, et contenant diverses méthodes d'interaction avec la base
+    """
     comptes = []
     
     def __init__(self):
+        """
+        Méthode vide
+        """
         pass
     
     def obtenirCompte(self, pseudo : str) -> Compte:
+        """
+        Si il existe, retourne le compte associé à un certain pseudonyme. Sinon retourne None
+        """
         for comp in self.comptes:
             if comp.pseudo == pseudo:
                 return comp
@@ -23,16 +32,25 @@ class BaseUtilisateur:
     
     #Cherche si le pseudo est dans la base
     def pseudoDansBase(self, pseudoCherche : str) -> bool:
+        """
+        Cherche si un certain pseudonyme est présent dans la base
+        """
         return (self.obtenirCompte(pseudoCherche) != None)
         
     #Ajoute un compte dans la base, si son pseudo n'est pas déjà présent
     def ajouterCompte(self, nouveauCompte : Compte):
+        """
+        Ajoute un certain compte dans la base, sous réserve que le pseudonyme y étant associé ne soit pas présent dans la base
+        """
         if not self.pseudoDansBase(nouveauCompte.pseudo):
             self.comptes.append(nouveauCompte)
         else:
             print("Le pseudo " + str(nouveauCompte.pseudo) + " est déjà pris")
     
     def supprimerCompte(self, pseudo : str):
+        """
+        
+        """
         self.comptes.remove(self.obtenirCompte(pseudo))
         
     def validerCompte(self, pseudo : str):
