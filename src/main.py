@@ -118,7 +118,7 @@ class Main:
         """
         self.continuer = True
         self.choixDispo = {"utilisateur" : [], "contributeur" : [], "admin" : []} #Dictionnaires contenant les choix associés à chaque type d'utilisateur
-        self.compteUtilisateur = Compte("Chad","Thunder",True) #Compte de l'utilisateur actuel (initialisé en rien)
+        self.compteUtilisateur = None #Compte de l'utilisateur actuel (initialisé en rien)
         self.typeUtilisateur = "" #Un des 3 mentionnés au-dessus, utilisateur, contributeur ou admin
         self.catalogueOFF = Catalogue() #OFF = Open Food Facts
         self.baseUsers = BaseUtilisateur() #La base utilisateur
@@ -126,8 +126,8 @@ class Main:
         #On initialise d'abord la base de données OFF
         self.catalogueOFF.chargerBase("../data/open_food_facts.csv")
         #Puis la base utilisateur
-        self.baseUsers.ajouterCompte(Compte("FredPoul","jesuisvieux",False))
-        self.baseUsers.ajouterCompte(Compte("Chad","Thunder",True))
+		self.baseUsers.ajouterCompte(Compte("admin","adminmdp",True))
+		self.baseUsers.ajouterCompte(Compte("contrib","contribmdp",False))
         #Puis enfin les choix disponibles, qu'on lie à leurs fonctions respectives
         self.choixDispo["utilisateur"] = []
         self.choixDispo["contributeur"] = []
@@ -442,8 +442,11 @@ class Main:
         """
         print("Vous pouvez afficher un nombre de produits allant de 0 à " + str(self.catalogueOFF.taille()))
         nombreDemande = self.obtenirChoix(self.catalogueOFF.taille())
+		
+		listeProduitsTriee = sorted(self.catalogueOFF.produits, key=lambda produit: produit.dateEnregistrement)
+		
         for i in range(nombreDemande):
-            print(self.catalogueOFF.produits[i])
+            print(listeProduitsTriee[i])
             
     def afficherIngredientsProduit(self, codeDemande = -1):#Si le code demandé vaut -1, alors il faut demander à l'utilisateur quel code il souhaite. Sinon on continue la méthode avec le code fourni
         """
