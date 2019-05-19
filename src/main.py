@@ -126,8 +126,8 @@ class Main:
         #On initialise d'abord la base de données OFF
         self.catalogueOFF.chargerBase("../data/open_food_facts.csv")
         #Puis la base utilisateur
-		self.baseUsers.ajouterCompte(Compte("admin","adminmdp",True))
-		self.baseUsers.ajouterCompte(Compte("contrib","contribmdp",False))
+        self.baseUsers.ajouterCompte(Compte("admin","adminmdp",True))
+        self.baseUsers.ajouterCompte(Compte("contrib","contribmdp",False))
         #Puis enfin les choix disponibles, qu'on lie à leurs fonctions respectives
         self.choixDispo["utilisateur"] = []
         self.choixDispo["contributeur"] = []
@@ -184,6 +184,7 @@ class Main:
         Au cours de ce procédé, tous les ingrédients sont uniformisés (majuscules, et accents et espaces retirés)
         """
         ingredientCherche = input("Rentrez le produit cherché : ")
+        ingredientChercheCopie = ingredientCherche
         ingredientCherche = uniformiserString(ingredientCherche)
         produitsTrouves = []
         
@@ -199,6 +200,7 @@ class Main:
         print("Les produits contenant l'ingrédient demandé sont : ")
         for prod in produitsTrouves:
             print(prod)
+        print("Ainsi, " + str(len(produitsTrouves)/len(self.catalogueOFF.produits)) + "% des produits de la base contiennent l'ingrédient " + ingredientChercheCopie)
     
     def prodHorsFrance(self):
         """
@@ -225,6 +227,7 @@ class Main:
         print("Ils sont les suivants : ")
         for prod in produitsHorsFrance:
             print(prod)
+        print("Ainsi, " + str(len(produitsHorsFrance)/len(self.catalogueOFF.produits)) + "% des produits de la base viennent d'ailleurs que de France")
         
     def creerModifProd(self):
         """
@@ -443,7 +446,7 @@ class Main:
         print("Vous pouvez afficher un nombre de produits allant de 0 à " + str(self.catalogueOFF.taille()))
         nombreDemande = self.obtenirChoix(self.catalogueOFF.taille())
 		
-		listeProduitsTriee = sorted(self.catalogueOFF.produits, key=lambda produit: produit.dateEnregistrement)
+        listeProduitsTriee = sorted(self.catalogueOFF.produits, key=lambda produit: produit.dateEnregistrement)
 		
         for i in range(nombreDemande):
             print(listeProduitsTriee[i])
